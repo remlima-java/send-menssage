@@ -1,6 +1,7 @@
 package br.dev.rtisystem.controller;
 
 import br.dev.rtisystem.model.MessageDto;
+import br.dev.rtisystem.model.entity.Message;
 import br.dev.rtisystem.service.impl.MessageServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +15,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequestMapping("/message")
 @Slf4j
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class MessageController {
 
     private final MessageServiceImpl service;
 
     @PostMapping
-    public ResponseEntity<MessageDto> message(@RequestBody MessageDto message) {
+    public ResponseEntity<Message> message(@RequestBody Message message) {
         log.info("Iniciando mensagem: {}", message);
 
         return ResponseEntity.ok(this.service.saveMessage(message));
