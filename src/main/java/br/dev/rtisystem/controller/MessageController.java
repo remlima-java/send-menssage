@@ -1,6 +1,6 @@
 package br.dev.rtisystem.controller;
 
-import br.dev.rtisystem.model.MessageDto;
+import br.dev.rtisystem.model.dtos.MessageDto;
 import br.dev.rtisystem.model.entity.Message;
 import br.dev.rtisystem.service.impl.MessageServiceImpl;
 import lombok.AllArgsConstructor;

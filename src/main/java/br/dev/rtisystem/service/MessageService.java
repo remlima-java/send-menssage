@@ -1,6 +1,6 @@
 package br.dev.rtisystem.service;
 
-import br.dev.rtisystem.model.MessageDto;
+import br.dev.rtisystem.model.dtos.MessageDto;
 import br.dev.rtisystem.model.entity.Message;
 
 import java.util.Set;

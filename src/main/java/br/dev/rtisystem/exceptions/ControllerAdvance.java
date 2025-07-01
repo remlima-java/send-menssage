@@ -13,7 +13,18 @@ public class ControllerAdvance {
 
     @ExceptionHandler(MessageNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Error> getMessageById(MessageNotFoundException exception) {
+    public ResponseEntity<Error> handlerMessageNotFoundException(MessageNotFoundException exception) {
+        Error error = Error.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.NOT_FOUND)
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Error> handlerUserNotFoundException(UserNotFoundException exception) {
         Error error = Error.builder()
                 .message(exception.getMessage())
                 .status(HttpStatus.NOT_FOUND)

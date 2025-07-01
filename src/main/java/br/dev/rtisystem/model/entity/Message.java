@@ -1,14 +1,18 @@
 package br.dev.rtisystem.model.entity;
 
 
-import br.dev.rtisystem.model.MessageDto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Message {
 
     @Id
@@ -21,14 +25,8 @@ public class Message {
     @Column(name = "receiver", nullable = false)
     private String to;
     private String content;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User sender;
+    private final LocalDateTime timestamp = LocalDateTime.now();
 
-    public Message(MessageDto message) {
-        this.id = message.getId();
-        this.from = message.getFrom();
-        this.to = message.getTo();
-        this.content = message.getContent();
-    }
-
-    public Message() {
-    }
 }
