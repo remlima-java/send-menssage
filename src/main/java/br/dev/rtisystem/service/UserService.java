@@ -8,8 +8,9 @@ import java.util.UUID;
 public interface UserService {
 
     User save(User user);
-    User getUser(UUID id);
-    List<User> getAllUsers();
+    User findById(UUID id);
+    List<User> findAll();
+    void delete(UUID id); // void pq não retorna nada após excluir o usuário
 
 
 }

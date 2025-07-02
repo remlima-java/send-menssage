@@ -41,7 +41,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Set<MessageDto> getAllMessages() {
         return this.messageRepository.findAll().stream().map(message -> {
-            message.setSender(this.userService.getUser(UUID.fromString("15025033-f75e-4098-b15b-6b70b96de938")));
+            message.setSender(this.userService.findById(UUID.fromString("15025033-f75e-4098-b15b-6b70b96de938")));
             return this.modelMapper.map(message, MessageDto.class);
         }).collect(Collectors.toSet());
     }

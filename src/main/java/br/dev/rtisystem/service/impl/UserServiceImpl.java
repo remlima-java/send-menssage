@@ -27,13 +27,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(UUID id) {
+    public User findById(UUID id) {
         return this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> findAll() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public void delete(UUID id) {
+        log.info("Deleting user with id: {}", id);
+        User user = findById(id);
+        try {
+            this.userRepository.delete(user);
+            log.info("User with id {} deleted successfully", id);
+        } catch (Exception e) {
+            log.error("Error deleting user with id {}: {}", id, e.getMessage());
+            throw new RuntimeException("Failed to delete user with id: " + id, e);
+        }
     }
 
 

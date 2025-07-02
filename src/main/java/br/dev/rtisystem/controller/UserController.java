@@ -29,20 +29,20 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         log.info("Iniciando mensagem getAllUsers");
-        return ResponseEntity.ok(this.service.getAllUsers());
+        return ResponseEntity.ok(this.service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable("id") UUID id) {
         log.info("Iniciando mensagem findById: {}", id);
-        return ResponseEntity.ok(this.service.getUser(id));
+        return ResponseEntity.ok(this.service.findById(id));
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<MessageDto> deleteById(@PathVariable("id") UUID id) {
-//        log.info("Iniciando mensagem deleteById: {}", id);
-//        this.service.deleteMessage(id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<User> deleteById(@PathVariable("id") UUID id) {
+        log.info("Iniciando mensagem deleteById: {}", id);
+        this.service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

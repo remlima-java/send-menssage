@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "usuarios-caraio")
+@Entity(name = "senders")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,9 +17,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sender_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages;
 }
