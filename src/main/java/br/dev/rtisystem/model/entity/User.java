@@ -19,6 +19,6 @@ public class User {
     private UUID id;
     private String username;
 
-    @OneToMany(mappedBy = "sender_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages;
 }

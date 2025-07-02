@@ -63,7 +63,7 @@
       data.forEach(m => {
         const item = document.createElement('li');
         item.className = 'list-group-item';
-        item.textContent = `De: ${m.from} → Para: ${m.to} | "${m.content}"`;
+        item.textContent = `Username: ' ${m.username} ' De: ${m.sender} → Para: ${m.receiver} | "${m.content}" enviado em ${new Date(m.timestamp).toLocaleString()}`;
         list.appendChild(item);
       });
     }

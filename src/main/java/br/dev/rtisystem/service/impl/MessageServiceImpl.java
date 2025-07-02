@@ -1,6 +1,7 @@
 package br.dev.rtisystem.service.impl;
 
 import br.dev.rtisystem.model.dtos.MessageDto;
+import br.dev.rtisystem.model.dtos.MessageDtozao;
 import br.dev.rtisystem.model.entity.Message;
 import br.dev.rtisystem.repository.MessageRepository;
 import br.dev.rtisystem.service.MessageService;
@@ -10,9 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -39,11 +39,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Set<MessageDto> getAllMessages() {
-        return this.messageRepository.findAll().stream().map(message -> {
-            message.setSender(this.userService.findById(UUID.fromString("15025033-f75e-4098-b15b-6b70b96de938")));
-            return this.modelMapper.map(message, MessageDto.class);
-        }).collect(Collectors.toSet());
+    public List<MessageDtozao> getAllMessages() {
+       return this.messageRepository.findMessageJoin();
     }
 
     @Override

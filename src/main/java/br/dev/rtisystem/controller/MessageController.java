@@ -1,6 +1,7 @@
 package br.dev.rtisystem.controller;
 
 import br.dev.rtisystem.model.dtos.MessageDto;
+import br.dev.rtisystem.model.dtos.MessageDtozao;
 import br.dev.rtisystem.model.entity.Message;
 import br.dev.rtisystem.service.impl.MessageServiceImpl;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,7 +29,7 @@ public class MessageController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<MessageDto>> findAll() {
+    public ResponseEntity<List<MessageDtozao>> findAll() {
         log.info("Iniciando mensagem findAll");
         return ResponseEntity.ok(this.service.getAllMessages());
     }

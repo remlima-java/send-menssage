@@ -1,7 +1,6 @@
 package br.dev.rtisystem.model.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,9 +25,6 @@ public class Message {
     @Column(name = "receiver", nullable = false)
     private String to;
     private String content;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private User sender;
     private final LocalDateTime timestamp = LocalDateTime.now();
 
 }
