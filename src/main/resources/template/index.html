@@ -12,6 +12,10 @@
 
     <form id="messageForm" class="mb-4">
       <div class="mb-3">
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" class="form-control" id="username" required />
+      </div>
+      <div class="mb-3">
         <label for="from" class="form-label">De:</label>
         <input type="text" class="form-control" id="from" required />
       </div>
@@ -31,14 +35,20 @@
   </div>
 
   <script>
-    const apiUrl = 'http://localhost:8080/message'; // ajuste conforme seu endpoint REST
+    const apiUrl = 'http://localhost:8080/user'; // ajuste conforme seu endpoint REST
 
     document.getElementById('messageForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const msg = {
-        from: document.getElementById('from').value,
-        to: document.getElementById('to').value,
-        content: document.getElementById('content').value
+        username: document.getElementById('username').value,
+        messages:[
+          {
+            from: document.getElementById('from').value,
+            to: document.getElementById('to').value,
+            content: document.getElementById('content').value
+          }
+        ]
       };
 
       const res = await fetch(apiUrl, {
@@ -54,9 +64,12 @@
         alert('Erro ao enviar mensagem');
       }
     });
+  </script>
 
+    <script>
+      const loadApiUrl = 'http://localhost:8080/message';
     async function loadMessages() {
-      const res = await fetch(apiUrl);
+      const res = await fetch(loadApiUrl);
       const data = await res.json();
       const list = document.getElementById('messageList');
       list.innerHTML = '';
@@ -70,5 +83,6 @@
 
     window.onload = loadMessages;
   </script>
+
 </body>
 </html>
