@@ -1,74 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mensagens</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-</head>
-<body class="bg-secondary text-white">
-  <div class="container py-4">
-    <h2 class="mb-4 text-primary">📨 Enviar Mensagem</h2>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mensagens</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <form id="messageForm" class="mb-4">
-      <div class="mb-3">
-        <label for="from" class="form-label">De:</label>
-        <input type="text" class="form-control" id="from" required />
-      </div>
-      <div class="mb-3">
-        <label for="to" class="form-label">Para:</label>
-        <input type="text" class="form-control" id="to" required />
-      </div>
-      <div class="mb-3">
-        <label for="content" class="form-label">Mensagem:</label>
-        <textarea class="form-control" id="content" rows="3" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-success">Enviar</button>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center py-8">
+<div class="container mx-auto p-4 max-w-lg bg-gray-800 rounded-lg shadow-xl">
+    <h2 class="mb-6 text-2xl font-bold text-blue-400 text-center">📨 Enviar Mensagem</h2>
+    <form id="messageForm" class="space-y-4">
+        <div>
+            <label for="username" class="block text-sm font-medium text-gray-300">Username:</label>
+            <input type="text" class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500" id="username" required/>
+        </div>
+        <div>
+            <label for="from" class="block text-sm font-medium text-gray-300">De:</label>
+            <input type="text" class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500" id="from" required/>
+        </div>
+        <div>
+            <label for="to" class="block text-sm font-medium text-gray-300">Para:</label>
+            <input type="text" class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500" id="to" required/>
+        </div>
+        <div>
+            <label for="content" class="block text-sm font-medium text-gray-300">Mensagem:</label>
+            <textarea class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500" id="content" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800">Enviar</button>
     </form>
 
-    <h4 class="text-secondary">Mensagens Enviadas</h4>
-    <ul id="messageList" class="list-group"></ul>
-  </div>
+    <h4 class="mt-8 mb-4 text-xl font-semibold text-gray-200">Mensagens Enviadas</h4>
+    <ul id="messageList" class="space-y-3">
+    </ul>
+</div>
 
-  <script>
-    const apiUrl = 'http://localhost:8080/message'; // ajuste conforme seu endpoint REST
-
-    document.getElementById('messageForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const msg = {
-        from: document.getElementById('from').value,
-        to: document.getElementById('to').value,
-        content: document.getElementById('content').value
-      };
-
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(msg)
-      });
-
-      if (res.ok) {
-        await loadMessages();
-        e.target.reset();
-      } else {
-        alert('Erro ao enviar mensagem');
-      }
-    });
+<script>
+    const apiUserUrl = 'http://localhost:8080/user';
+    const apiMessageUrl = 'http://localhost:8080/message';
 
     async function loadMessages() {
-      const res = await fetch(apiUrl);
-      const data = await res.json();
-      const list = document.getElementById('messageList');
-      list.innerHTML = '';
-      data.forEach(m => {
-        const item = document.createElement('li');
-        item.className = 'list-group-item';
-        item.textContent = `Username: ' ${m.username} ' De: ${m.sender} → Para: ${m.receiver} | "${m.content}" enviado em ${new Date(m.timestamp).toLocaleString()}`;
-        list.appendChild(item);
-      });
+        try {
+            const res = await fetch(apiMessageUrl);
+            if (res.ok) {
+                const messages = await res.json();
+                const messageList = document.getElementById('messageList');
+                messageList.innerHTML = '';
+
+                messages.forEach(msg => {
+                    const li = document.createElement('li');
+                    li.className = 'bg-gray-700 p-3 rounded-md text-gray-100 shadow';
+
+                    li.innerHTML = `
+                        Username: '${msg.username || 'N/A'}' | De: ${msg.from || msg.sender} → Para: ${msg.to || msg.receiver}<br>
+                        "${msg.content}" | enviado em ${new Date(msg.timestamp).toLocaleString()}
+                    `;
+                    messageList.prepend(li);
+                });
+            } else {
+                console.error('Erro ao carregar mensagens:', res.status, res.statusText);
+                alert('Erro ao carregar mensagens');
+            }
+        } catch (error) {
+            console.error('Erro de rede ao carregar mensagens:', error);
+            alert('Erro de rede ao carregar mensagens');
+        }
     }
 
-    window.onload = loadMessages;
-  </script>
+    document.getElementById('messageForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const msgPayload = {
+            username: document.getElementById('username').value,
+            messages:[
+                {
+                    from: document.getElementById('from').value,
+                    to: document.getElementById('to').value,
+                    content: document.getElementById('content').value
+                }
+            ]
+        };
+
+        try {
+            const res = await fetch(apiUserUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(msgPayload)
+            });
+
+            if (res.ok) {
+                await loadMessages();
+                e.target.reset();
+            } else {
+                console.error('Erro ao enviar mensagem:', res.status, res.statusText, await res.text());
+                alert('Erro ao enviar mensagem');
+            }
+        } catch (error) {
+            console.error('Erro de rede ao enviar mensagem:', error);
+            alert('Erro de rede ao enviar mensagem');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', loadMessages);
+</script>
 </body>
 </html>
