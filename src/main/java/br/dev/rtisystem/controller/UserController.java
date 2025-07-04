@@ -1,6 +1,7 @@
 package br.dev.rtisystem.controller;
 
 import br.dev.rtisystem.model.entity.User;
+import br.dev.rtisystem.service.MessageProducer;
 import br.dev.rtisystem.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,15 +15,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequestMapping("/user")
 @Slf4j
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 
     private final UserService service;
+    private final MessageProducer producer;
 
     @PostMapping
     public ResponseEntity<User> save(@RequestBody User user) {
         log.info("Salvando: {}", user);
-
+        producer.send("chat-group", user.toString());
         return ResponseEntity.ok(this.service.save(user));
     }
 

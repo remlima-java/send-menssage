@@ -1,21 +1,21 @@
-# Spring Boot configuration
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: chat-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   application:
     name: App
 
-    #main:
-    # allow-bean-definition-overriding: true
-  # Database
   datasource:
-    driver-class-name: org.postgresql.Driver
-    # For correct works with docker-compose, we need to change "localhost" to a service name, take from docker-compose.yml
-    #url: jdbc:postgresql://db:5432/automobiles
     url: jdbc:postgresql://localhost:5432/messages
     username: postgres
     password: postgres
-  # JPA properties
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     database: postgresql
