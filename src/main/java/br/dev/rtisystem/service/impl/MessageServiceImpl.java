@@ -1,7 +1,6 @@
 package br.dev.rtisystem.service.impl;
 
 import br.dev.rtisystem.model.dtos.MessageDto;
-import br.dev.rtisystem.model.dtos.MessageDtozao;
 import br.dev.rtisystem.model.entity.Message;
 import br.dev.rtisystem.repository.MessageRepository;
 import br.dev.rtisystem.service.MessageService;
@@ -39,8 +38,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDtozao> getAllMessages() {
-       return this.messageRepository.findMessageJoin();
+    public List<MessageDto> getAllMessages() {
+        log.info("Fetching all messages");
+        return this.messageRepository.findMessageJoin().stream()
+                .map(message -> modelMapper.map(message, MessageDto.class))
+                .toList();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package br.dev.rtisystem.service;
 
 import br.dev.rtisystem.model.dtos.MessageDto;
-import br.dev.rtisystem.model.dtos.MessageDtozao;
 import br.dev.rtisystem.model.entity.Message;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public interface MessageService {
 
     void deleteMessage(UUID id);
 
-    List<MessageDtozao> getAllMessages();
+    List<MessageDto> getAllMessages();
 
     Message saveMessage(Message message);
 

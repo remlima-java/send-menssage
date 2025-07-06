@@ -1,53 +1,40 @@
 package br.dev.rtisystem.controller;
 
-import br.dev.rtisystem.model.dtos.MessageDto;
-import br.dev.rtisystem.model.entity.Message;
-import br.dev.rtisystem.service.MessageConsumer;
-import br.dev.rtisystem.service.MessageProducer;
-import br.dev.rtisystem.service.impl.MessageServiceImpl;
+import br.dev.rtisystem.model.entity.User;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.UUID;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/message")
-@Slf4j
 public class MessageController {
 
-    private final MessageServiceImpl service;
-
-    private final MessageProducer producer;
-
-    private final MessageConsumer consumer;
-
-    @PostMapping
-    public ResponseEntity<Message> message(@RequestBody Message message) {
-        log.info("Iniciando mensagem: {}", message);
-        this.producer.send("chat-group", message.toString());
-        return ResponseEntity.ok(this.service.saveMessage(message));
-    }
+    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
     @GetMapping("/stream")
     public SseEmitter stream() {
-        return consumer.getEmitter();
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onTimeout(() -> emitters.remove(emitter));
+        emitters.add(emitter);
+        return emitter;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MessageDto> findById(@PathVariable("id") UUID id) {
-        log.info("Iniciando mensagem findById: {}", id);
-        return ResponseEntity.ok(this.service.getMessageById(id));
+    @KafkaListener(topics = "chat-group", groupId = "chat-group-ui")
+    public void listen(User user) {
+        for (SseEmitter emitter : emitters) {
+            try {
+                emitter.send(SseEmitter.event().name("message").data(user));
+            } catch (IOException e) {
+                emitter.completeWithError(e);
+                emitters.remove(emitter);
+            }
+        }
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<MessageDto> deleteById(@PathVariable("id") UUID id) {
-        log.info("Iniciando mensagem deleteById: {}", id);
-        this.service.deleteMessage(id);
-        return ResponseEntity.noContent().build();
-    }
-
 }

@@ -1,19 +1,26 @@
 spring:
-  kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-      group-id: chat-group
-      auto-offset-reset: earliest
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   application:
     name: App
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: springframework.kafka.support.serializer.ErrorHandlingSerializer
+      value-serializer: springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      group-id: chat-group-ui
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      value-deserializer: org.apache.kafka.common.serializer.JsonSerializer
+
 
   datasource:
     url: jdbc:postgresql://localhost:5432/messages
     username: postgres
     password: postgres
+
   jpa:
     hibernate:
       ddl-auto: update

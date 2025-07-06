@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,8 +24,10 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> save(@RequestBody User user) {
         log.info("Salvando: {}", user);
-        producer.send("chat-group", user.toString());
-        return ResponseEntity.ok(this.service.save(user));
+        user.getMessages().forEach(message -> message.setTimestamp(LocalDateTime.now().toString()));
+        User save = this.service.save(user);
+        producer.send("chat-group", save);
+        return ResponseEntity.ok(save);
     }
 
     @GetMapping

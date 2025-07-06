@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -25,6 +24,5 @@ public class Message {
     @Column(name = "receiver", nullable = false)
     private String to;
     private String content;
-    private final LocalDateTime timestamp = LocalDateTime.now();
-
+    private String timestamp;
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageDto {
+public class MessageDto{
 
     private UUID id;
     private String from;
@@ -18,5 +18,8 @@ public class MessageDto {
     private String content;
     private LocalDateTime timestamp;
     private String sender;
+    private String receiver;
+    private String username;
+
 
 }
