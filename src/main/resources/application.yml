@@ -5,15 +5,15 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     producer:
-      key-serializer: springframework.kafka.support.serializer.ErrorHandlingSerializer
-      value-serializer: springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
     consumer:
       group-id: chat-group-ui
       auto-offset-reset: earliest
       enable-auto-commit: false
-      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
-      value-deserializer: org.apache.kafka.common.serializer.JsonSerializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 
   datasource:

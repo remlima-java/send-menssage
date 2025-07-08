@@ -119,6 +119,7 @@
 
         // Toast visual
         document.getElementById("toastBody").textContent = `${user.username} → ${msg.to}: ${msg.content}`;
+        new bootstrap.Toast(document.getElementById("liveToast")).show();
       });
     } catch (error) {
       console.warn("Erro ao processar SSE:", error);

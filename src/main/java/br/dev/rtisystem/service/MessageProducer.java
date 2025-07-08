@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MessageProducer {
 
-    private KafkaTemplate<String, User> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     public void send(String topic, User user) {
         log.info("Enviando para tópico {}: {}", topic, user);

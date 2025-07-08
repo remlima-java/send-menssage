@@ -1,8 +1,11 @@
 package br.dev.rtisystem.controller;
 
 import br.dev.rtisystem.model.entity.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -13,9 +16,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:63342")
 public class MessageController {
 
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    private final ObjectMapper objectMapper;
 
     @GetMapping("/stream")
     public SseEmitter stream() {
@@ -27,7 +32,9 @@ public class MessageController {
     }
 
     @KafkaListener(topics = "chat-group", groupId = "chat-group-ui")
-    public void listen(User user) {
+    public void listen(String message) throws JsonProcessingException {
+        User user = objectMapper.readValue(message, User.class);
+
         for (SseEmitter emitter : emitters) {
             try {
                 emitter.send(SseEmitter.event().name("message").data(user));

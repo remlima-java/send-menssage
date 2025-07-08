@@ -3,6 +3,8 @@ package br.dev.rtisystem.controller;
 import br.dev.rtisystem.model.entity.User;
 import br.dev.rtisystem.service.MessageProducer;
 import br.dev.rtisystem.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +18,19 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequestMapping("/user")
 @Slf4j
+@CrossOrigin(origins = "http://localhost:63342")
 public class UserController {
 
     private final UserService service;
     private final MessageProducer producer;
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user) {
+    public ResponseEntity<User> save(@RequestBody User user) throws JsonProcessingException {
         log.info("Salvando: {}", user);
         user.getMessages().forEach(message -> message.setTimestamp(LocalDateTime.now().toString()));
         User save = this.service.save(user);
-        producer.send("chat-group", save);
+        String userOBj = new ObjectMapper().writeValueAsString(save);
+        producer.send("chat-group", userOBj);
         return ResponseEntity.ok(save);
     }
 
