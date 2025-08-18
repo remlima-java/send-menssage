@@ -1,0 +1,9 @@
+# This file is used for local development configuration.
+credentials:
+  account_sid: ${ACCOUNT_SID}
+  auth_token: ${AUTH_TOKEN}
+  app_sid: ${APP_SID}
+  number: ${NUMBER}
+  ngrok: ${NGROK}
+  api_key: ${API_KEY}
+  api_secret: ${API_SECRET}

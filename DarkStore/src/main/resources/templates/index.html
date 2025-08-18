@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkStore - Loja Online</title>
+    <!-- Bootstrap CSS -->
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #212529;
+        }
+        .hero-section {
+            background-color: #343a40;
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 30px;
+        }
+        .product-card {
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        footer {
+            background-color: #212529;
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-moon me-2"></i>DarkStore
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#produtos">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contato">Contato</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">DarkStore</h1>
+            <p class="lead mb-4">Produtos exclusivos com estilo dark</p>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-5" id="produtos">
+        <div class="container">
+            <h2 class="text-center mb-5">Nossos Produtos</h2>
+
+            <div class="row">
+                <!-- Produto 1 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card product-card h-100 shadow">
+                        <div class="card-body text-center">
+                            <div class="d-grid mt-3">
+                                <script async
+                                        src="https://js.stripe.com/v3/buy-button.js">
+                                </script>
+
+                                <stripe-buy-button
+                                        buy-button-id="buy_btn_1RwUMCP7cKHbRgCeWb2fAhXu"
+                                        publishable-key="pk_live_51RCGosP7cKHbRgCeI66145dg4k4Ahio9acli25Cr028HblL8sHTXqilMzmDsj71Wt5hdTc73PN3vwkTA3v8f8jFe00v8EaQapj"
+                                >
+                                </stripe-buy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produto 2 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card product-card h-100 shadow">
+                        <div class="card-body text-center">
+                            <div class="d-grid mt-3">
+                                <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+                                <stripe-buy-button
+                                    buy-button-id="buy_btn_1RwU9yP7cKHbRgCeQSHCurGZ"
+                                    publishable-key="pk_live_51RCGosP7cKHbRgCeI66145dg4k4Ahio9acli25Cr028HblL8sHTXqilMzmDsj71Wt5hdTc73PN3vwkTA3v8f8jFe00v8EaQapj">
+                                </stripe-buy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produto 3 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card product-card h-100 shadow">
+                        <div class="card-body text-center">
+                            <div class="d-grid mt-3">
+                                <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+                                <stripe-buy-button
+                                    buy-button-id="buy_btn_1Rpjj6P7cKHbRgCem5AVE153"
+                                    publishable-key="pk_live_51RCGosP7cKHbRgCeI66145dg4k4Ahio9acli25Cr028HblL8sHTXqilMzmDsj71Wt5hdTc73PN3vwkTA3v8f8jFe00v8EaQapj">
+                                </stripe-buy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produto 4 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card product-card h-100 shadow">
+                        <div class="card-body text-center">
+                            <div class="d-grid mt-3">
+                                <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+                                <stripe-buy-button
+                                    buy-button-id="buy_btn_1RwUPNP7cKHbRgCed3YMO631"
+                                    publishable-key="pk_live_51RCGosP7cKHbRgCeI66145dg4k4Ahio9acli25Cr028HblL8sHTXqilMzmDsj71Wt5hdTc73PN3vwkTA3v8f8jFe00v8EaQapj">
+                                </stripe-buy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <!-- Produto 5 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card product-card h-100 shadow">
+                        <div class="card-body text-center">
+                            <div class="d-grid mt-3">
+                                <script async
+                                        src="https://js.stripe.com/v3/buy-button.js">
+                                </script>
+
+                                <stripe-buy-button
+                                        buy-button-id="buy_btn_1RSACLP7cKHbRgCexAlFIJHf"
+                                        publishable-key="pk_live_51RCGosP7cKHbRgCeI66145dg4k4Ahio9acli25Cr028HblL8sHTXqilMzmDsj71Wt5hdTc73PN3vwkTA3v8f8jFe00v8EaQapj"
+                                >
+                                </stripe-buy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produto 6 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card product-card h-100 shadow">
+                        <div class="card-body text-center">
+                            <div class="d-grid mt-3">
+                                <script async
+                                        src="https://js.stripe.com/v3/buy-button.js">
+                                </script>
+
+                                <stripe-buy-button
+                                        buy-button-id="buy_btn_1RSAF1P7cKHbRgCeHMsH9ie6"
+                                        publishable-key="pk_live_51RCGosP7cKHbRgCeI66145dg4k4Ahio9acli25Cr028HblL8sHTXqilMzmDsj71Wt5hdTc73PN3vwkTA3v8f8jFe00v8EaQapj"
+                                >
+                                </stripe-buy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produto 7 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card product-card h-100 shadow">
+                        <div class="card-body text-center">
+                            <div class="d-grid mt-3">
+                                <stripe-buy-button
+                                        buy-button-id="buy_btn_1RSADoP7cKHbRgCe3kyHVD6a"
+                                        publishable-key="pk_live_51RCGosP7cKHbRgCeI66145dg4k4Ahio9acli25Cr028HblL8sHTXqilMzmDsj71Wt5hdTc73PN3vwkTA3v8f8jFe00v8EaQapj"
+                                >
+                                </stripe-buy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produto 8 -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card product-card h-100 shadow">
+                        <div class="card-body text-center">
+                            <div class="d-grid mt-3">
+                                <script async
+                                        src="https://js.stripe.com/v3/buy-button.js">
+                                </script>
+
+                                <stripe-buy-button
+                                        buy-button-id="buy_btn_1RS9wEP7cKHbRgCe9NsTr4IC"
+                                        publishable-key="pk_live_51RCGosP7cKHbRgCeI66145dg4k4Ahio9acli25Cr028HblL8sHTXqilMzmDsj71Wt5hdTc73PN3vwkTA3v8f8jFe00v8EaQapj"
+                                >
+                                </stripe-buy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <h5><i class="fas fa-moon me-2"></i>DarkStore</h5>
+                    <p>A melhor loja para quem curte o estilo dark.</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Contato</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2"></i> contato@darkstore.com.br</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="text-center">
+                <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> DarkStore</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
