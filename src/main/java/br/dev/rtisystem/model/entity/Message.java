@@ -1,7 +1,10 @@
 package br.dev.rtisystem.model.entity;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,12 +20,8 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @Column(name = "sender", nullable = false)
-    private String from;
-
-    @Column(name = "receiver", nullable = false)
-    private String to;
+    private String emitter;
+    private String recipient;
     private String content;
     private String timestamp;
 }

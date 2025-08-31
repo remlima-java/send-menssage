@@ -1,47 +1,32 @@
 package br.dev.rtisystem.controller;
 
-import br.dev.rtisystem.model.entity.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.dev.rtisystem.model.dtos.MessageDto;
+import br.dev.rtisystem.service.MessageService;
+import br.dev.rtisystem.service.queue.MessageConsumer;
 import lombok.AllArgsConstructor;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:63342")
 public class MessageController {
 
-    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
-    private final ObjectMapper objectMapper;
+    private final MessageService messageService;
+    private final MessageConsumer messageConsumer;
 
     @GetMapping("/stream")
-    public SseEmitter stream() {
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
-        emitter.onCompletion(() -> emitters.remove(emitter));
-        emitter.onTimeout(() -> emitters.remove(emitter));
-        emitters.add(emitter);
-        return emitter;
+    public ResponseEntity<SseEmitter> stream() {
+        return ResponseEntity.ok(this.messageConsumer.stream());
     }
 
-    @KafkaListener(topics = "chat-group", groupId = "chat-group-ui")
-    public void listen(String message) throws JsonProcessingException {
-        User user = objectMapper.readValue(message, User.class);
-
-        for (SseEmitter emitter : emitters) {
-            try {
-                emitter.send(SseEmitter.event().name("message").data(user));
-            } catch (IOException e) {
-                emitter.completeWithError(e);
-                emitters.remove(emitter);
-            }
-        }
+    @GetMapping("/messages")
+    public ResponseEntity<List<MessageDto>> getAllMessages() {
+        return ResponseEntity.ok(this.messageService.getAllMessages());
     }
 }

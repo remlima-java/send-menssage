@@ -13,13 +13,10 @@ import java.util.UUID;
 public class MessageDto{
 
     private UUID id;
-    private String from;
-    private String to;
+    private String emitter;
+    private String recipient;
     private String content;
     private LocalDateTime timestamp;
-    private String sender;
-    private String receiver;
-    private String username;
 
 
 }

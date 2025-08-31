@@ -40,7 +40,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<MessageDto> getAllMessages() {
         log.info("Fetching all messages");
-        return this.messageRepository.findMessageJoin().stream()
+        return this.messageRepository.findAll().stream()
                 .map(message -> modelMapper.map(message, MessageDto.class))
                 .toList();
     }

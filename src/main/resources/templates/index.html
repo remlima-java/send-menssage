@@ -110,7 +110,7 @@
         bubble.className = "chat-bubble";
         bubble.innerHTML = `
             <strong>${user.username}</strong><br>
-            🗨️ De: ${msg.from} → Para: ${msg.to}<br>
+            🗨️ De: ${msg.emitter} → Para: ${msg.recipient}<br>
             "${msg.content}"<br>
             <small class="text-muted">${new Date(msg.timestamp).toLocaleString()}</small>
           `;

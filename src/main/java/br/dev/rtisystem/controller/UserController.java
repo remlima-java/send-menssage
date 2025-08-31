@@ -1,10 +1,8 @@
 package br.dev.rtisystem.controller;
 
 import br.dev.rtisystem.model.entity.User;
-import br.dev.rtisystem.service.MessageProducer;
+import br.dev.rtisystem.service.queue.MessageProducer;
 import br.dev.rtisystem.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +23,12 @@ public class UserController {
     private final MessageProducer producer;
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user) throws JsonProcessingException {
+    public ResponseEntity<User> save(@RequestBody User user) {
         log.info("Salvando: {}", user);
-        user.getMessages().forEach(message -> message.setTimestamp(LocalDateTime.now().toString()));
+        user.getMessages().forEach(message -> message.setTimestamp(LocalDateTime.now()));
         User save = this.service.save(user);
-        String userOBj = new ObjectMapper().writeValueAsString(save);
-        producer.send("chat-group", userOBj);
+        //String userOBj = new ObjectMapper().writeValueAsString(save);
+        producer.send("chat-group", save);
         return ResponseEntity.ok(save);
     }
 
