@@ -26,36 +26,56 @@ public class MessageConsumer {
     public SseEmitter stream() {
         log.info("Criando novo emitter");
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
-        emitter.onCompletion(() -> emitters.remove(emitter));
-        emitter.onTimeout(() -> emitters.remove(emitter));
+        emitter.onCompletion(() -> {
+            log.info("Emitter concluído, removendo da lista");
+            emitters.remove(emitter);
+        });
+        emitter.onTimeout(() -> {
+            log.info("Emitter timeout, removendo da lista");
+            emitters.remove(emitter);
+        });
         emitters.add(emitter);
-        log.info("Emitter criado");
+        log.info("Emitter criado e adicionado à lista. Total de emitters: {}", emitters.size());
         return emitter;
     }
 
     @KafkaListener(topics = "chat-group", groupId = "chat-group-ui")
-    public void listen(String message)  {
-        log.info("Mensagem recebida: {}", message);
+    public void listen(String message) {
+        log.info("Mensagem recebida do Kafka: {}", message);
 
-        User.UserBuilder builder;
+        User user;
         try {
-            builder = objectMapper.readValue(message, User.UserBuilder.class);
+            user = objectMapper.readValue(message, User.class);
+            log.info("Mensagem convertida com sucesso para objeto User. Username: {}, Total de mensagens: {}",
+                    user.getUsername(),
+                    user.getMessages() != null ? user.getMessages().size() : 0);
         } catch (JsonProcessingException e) {
-            log.error("Erro ao converter mensagem recebida para objeto User: {}", e.getMessage());
+            log.error("Erro ao converter mensagem do Kafka para objeto User: {}", e.getMessage(), e);
             throw new JsonErrorException(e);
         }
 
-        User.UserBuilder finalBuilder = builder;
+        if (user == null) {
+            log.error("Usuário é nulo após deserialização");
+            return;
+        }
+
+        if (user.getMessages() == null) {
+            log.error("Lista de mensagens do usuário {} é nula", user.getUsername());
+            return;
+        }
+
+        log.info("Enviando mensagens para {} emitters", emitters.size());
+
         emitters.forEach(emitter -> {
             try {
-                emitter.send(SseEmitter.event().name("message").data(finalBuilder.build()));
-                emitter.complete();
-                log.info("Mensagem enviada para o cliente");
+                log.debug("Enviando evento para um emitter");
+                emitter.send(SseEmitter.event().name("message").data(user));
+                log.info("Mensagem enviada com sucesso para o cliente");
             } catch (IOException e) {
-                log.error("Erro ao enviar mensagem para o cliente: {}", e.getMessage());
+                log.error("Erro ao enviar mensagem para o cliente: {}", e.getMessage(), e);
+                emitters.remove(emitter);
                 throw new ListenErrorMessageException(e);
             }
         });
-
     }
 }

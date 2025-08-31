@@ -2,6 +2,12 @@ spring:
   application:
     name: App
 
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+
   kafka:
     bootstrap-servers: localhost:9092
     producer:
@@ -15,7 +21,6 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-
   datasource:
     url: jdbc:postgresql://localhost:5432/messages
     username: postgres
@@ -23,20 +28,33 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     database: postgresql
+    properties:
+      hibernate:
+        format_sql: true
 
-  boot:
-    admin:
-      client:
-        url: http://localhost:8080
+logging:
+  level:
+    root: INFO
+    br.dev.rtisystem: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO
 
+# Configuração do Actuator com Prometheus para integração com Grafana
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "health,info,metrics,prometheus"
   endpoint:
     health:
       show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true

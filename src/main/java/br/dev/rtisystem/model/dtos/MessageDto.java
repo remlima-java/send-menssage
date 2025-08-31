@@ -1,15 +1,13 @@
 package br.dev.rtisystem.model.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class MessageDto{
 
     private UUID id;

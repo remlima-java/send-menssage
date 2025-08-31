@@ -1,19 +1,16 @@
 package br.dev.rtisystem.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "senders")
-@Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class User  {
 
     @Id
