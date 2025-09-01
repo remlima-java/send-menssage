@@ -1,6 +1,6 @@
 package br.dev.rtisystem.service.queue;
 
-import br.dev.rtisystem.model.entity.User;
+import br.dev.rtisystem.model.dtos.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -17,7 +17,7 @@ public class MessageProducer {
     private final ObjectMapper objectMapper;
 
 
-    public void send(String topic, User user) {
+    public void send(String topic, UserDto user) {
         log.info("Enviando para tópico {}: {}", topic, user);
         try{
              kafkaTemplate.send(topic, user.getId().toString(), objectMapper.writeValueAsString(user));

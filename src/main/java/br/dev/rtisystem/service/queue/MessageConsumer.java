@@ -2,7 +2,7 @@ package br.dev.rtisystem.service.queue;
 
 import br.dev.rtisystem.exceptions.JsonErrorException;
 import br.dev.rtisystem.exceptions.ListenErrorMessageException;
-import br.dev.rtisystem.model.entity.User;
+import br.dev.rtisystem.model.dtos.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -43,24 +43,19 @@ public class MessageConsumer {
     public void listen(String message) {
         log.info("Mensagem recebida do Kafka: {}", message);
 
-        User user;
+        UserDto userDto;
         try {
-            user = objectMapper.readValue(message, User.class);
-            log.info("Mensagem convertida com sucesso para objeto User. Username: {}, Total de mensagens: {}",
-                    user.getUsername(),
-                    user.getMessages() != null ? user.getMessages().size() : 0);
+            userDto = objectMapper.readValue(message, UserDto.class);
+            log.info("Mensagem convertida com sucesso para objeto UserDto. Username: {}, Total de mensagens: {}",
+                    userDto.getUsername(),
+                    userDto.getMessages() != null ? userDto.getMessages().size() : 0);
         } catch (JsonProcessingException e) {
-            log.error("Erro ao converter mensagem do Kafka para objeto User: {}", e.getMessage(), e);
+            log.error("Erro ao converter mensagem do Kafka para objeto UserDto: {}", e.getMessage(), e);
             throw new JsonErrorException(e);
         }
 
-        if (user == null) {
-            log.error("Usuário é nulo após deserialização");
-            return;
-        }
-
-        if (user.getMessages() == null) {
-            log.error("Lista de mensagens do usuário {} é nula", user.getUsername());
+        if (userDto.getMessages() == null) {
+            log.error("Erro ao ler mensagem do tópico: chat-group");
             return;
         }
 
@@ -69,7 +64,7 @@ public class MessageConsumer {
         emitters.forEach(emitter -> {
             try {
                 log.debug("Enviando evento para um emitter");
-                emitter.send(SseEmitter.event().name("message").data(user));
+                emitter.send(SseEmitter.event().name("message").data(userDto));
                 log.info("Mensagem enviada com sucesso para o cliente");
             } catch (IOException e) {
                 log.error("Erro ao enviar mensagem para o cliente: {}", e.getMessage(), e);

@@ -1,4 +1,4 @@
-package br.dev.rtisystem.exceptions;
+package br.dev.rtisystem.exceptions.handler;
 
 import lombok.Builder;
 import lombok.Data;

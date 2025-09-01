@@ -1,7 +1,8 @@
 package br.dev.rtisystem.model.dtos;
 
-import br.dev.rtisystem.model.entity.Message;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,5 +13,5 @@ import java.util.UUID;
 public class UserDto {
     private UUID id;
     private String username;
-    private List<Message> messages;
+    private List<MessageDto> messages;
 }

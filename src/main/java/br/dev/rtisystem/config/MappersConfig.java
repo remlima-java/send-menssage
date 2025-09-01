@@ -1,4 +1,4 @@
-package br.dev.rtisystem.config.bean;
+package br.dev.rtisystem.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

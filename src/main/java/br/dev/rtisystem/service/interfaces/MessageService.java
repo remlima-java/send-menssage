@@ -1,4 +1,4 @@
-package br.dev.rtisystem.service;
+package br.dev.rtisystem.service.interfaces;
 
 import br.dev.rtisystem.model.dtos.MessageDto;
 import br.dev.rtisystem.model.entity.Message;

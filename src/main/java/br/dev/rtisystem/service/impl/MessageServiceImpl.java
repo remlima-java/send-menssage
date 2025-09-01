@@ -3,8 +3,7 @@ package br.dev.rtisystem.service.impl;
 import br.dev.rtisystem.model.dtos.MessageDto;
 import br.dev.rtisystem.model.entity.Message;
 import br.dev.rtisystem.repository.MessageRepository;
-import br.dev.rtisystem.service.MessageService;
-import br.dev.rtisystem.service.UserService;
+import br.dev.rtisystem.service.interfaces.MessageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -20,7 +19,6 @@ public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
     private final ModelMapper modelMapper;
-    private final UserService userService;
 
     @Override
     public MessageDto sendMessage(MessageDto message) {
@@ -42,7 +40,7 @@ public class MessageServiceImpl implements MessageService {
         log.info("Fetching all messages");
         return this.messageRepository.findAll().stream()
                 .map(message -> modelMapper.map(message, MessageDto.class))
-                .toList();
+                .toList().reversed();
     }
 
     @Override

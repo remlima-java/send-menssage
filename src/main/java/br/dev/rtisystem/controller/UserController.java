@@ -1,8 +1,8 @@
 package br.dev.rtisystem.controller;
 
-import br.dev.rtisystem.model.entity.User;
+import br.dev.rtisystem.model.dtos.UserDto;
+import br.dev.rtisystem.service.interfaces.UserService;
 import br.dev.rtisystem.service.queue.MessageProducer;
-import br.dev.rtisystem.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,29 +23,28 @@ public class UserController {
     private final MessageProducer producer;
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user) {
-        log.info("Salvando: {}", user);
-        user.getMessages().forEach(message -> message.setTimestamp(LocalDateTime.now()));
-        User save = this.service.save(user);
-        //String userOBj = new ObjectMapper().writeValueAsString(save);
+    public ResponseEntity<UserDto> save(@RequestBody UserDto userDto) {
+        log.info("Salvando: {}", userDto);
+        userDto.getMessages().forEach(message -> message.setTimestamp(LocalDateTime.now()));
+        UserDto save = this.service.save(userDto);
         producer.send("chat-group", save);
         return ResponseEntity.ok(save);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         log.info("Iniciando mensagem getAllUsers");
         return ResponseEntity.ok(this.service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable("id") UUID id) {
+    public ResponseEntity<UserDto> findById(@PathVariable("id") UUID id) {
         log.info("Iniciando mensagem findById: {}", id);
         return ResponseEntity.ok(this.service.findById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
         log.info("Iniciando mensagem deleteById: {}", id);
         this.service.delete(id);
         return ResponseEntity.noContent().build();
