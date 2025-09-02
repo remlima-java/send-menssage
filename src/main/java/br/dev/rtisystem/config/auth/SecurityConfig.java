@@ -29,7 +29,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/actuator/**").permitAll()
                         .requestMatchers("/", "/index.html", "/login.html", "/register.html", "/404.html").permitAll()
                         .requestMatchers("/stream", "/stream/**").permitAll() // Permitir acesso ao stream sem token
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()

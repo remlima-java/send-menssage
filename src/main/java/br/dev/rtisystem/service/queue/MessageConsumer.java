@@ -1,7 +1,6 @@
 package br.dev.rtisystem.service.queue;
 
 import br.dev.rtisystem.exceptions.JsonErrorException;
-import br.dev.rtisystem.exceptions.ListenErrorMessageException;
 import br.dev.rtisystem.model.dtos.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +60,9 @@ public class MessageConsumer {
 
         log.info("Enviando mensagens para {} emitters", emitters.size());
 
+        // Lista para armazenar emitters que precisam ser removidos
+        List<SseEmitter> deadEmitters = new CopyOnWriteArrayList<>();
+
         emitters.forEach(emitter -> {
             try {
                 log.debug("Enviando evento para um emitter");
@@ -68,9 +70,15 @@ public class MessageConsumer {
                 log.info("Mensagem enviada com sucesso para o cliente");
             } catch (IOException e) {
                 log.error("Erro ao enviar mensagem para o cliente: {}", e.getMessage(), e);
-                emitters.remove(emitter);
-                throw new ListenErrorMessageException(e);
+                // Adicionar à lista de emitters mortos
+                deadEmitters.add(emitter);
             }
         });
+
+        // Remover emitters mortos após a iteração
+        if (!deadEmitters.isEmpty()) {
+            log.info("Removendo {} emitters mortos", deadEmitters.size());
+            emitters.removeAll(deadEmitters);
+        }
     }
 }

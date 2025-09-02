@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -20,7 +22,7 @@ public class MessageProducer {
     public void send(String topic, UserDto user) {
         log.info("Enviando para tópico {}: {}", topic, user);
         try{
-             kafkaTemplate.send(topic, user.getId().toString(), objectMapper.writeValueAsString(user));
+             kafkaTemplate.send(topic, UUID.randomUUID().toString(), objectMapper.writeValueAsString(user));
         }catch (Exception e){
             log.error("Erro ao enviar mensagem para o tópico {}: {}", topic, e.getMessage());
             throw new RuntimeException("Falha ao enviar mensagem para o tópico: " + topic, e);
