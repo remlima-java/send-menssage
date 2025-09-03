@@ -44,8 +44,12 @@ logging:
 
 # Configuração do Actuator com Prometheus para integração com Grafana
 management:
+  observations:
+    enable:
+      spring.security: false
   endpoints:
     web:
+      base-path: /actuator
       exposure:
         include: "*"
   endpoint:
@@ -58,3 +62,12 @@ management:
     metrics:
       export:
         enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    disable-swagger-default-url: true
+  show-actuator: true
