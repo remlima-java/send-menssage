@@ -10,6 +10,7 @@ import br.dev.rtisystem.service.interfaces.auth.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 @Service
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -58,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseDto login(LoginDto request) {
+        try{
         // Autenticar o usuário
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -79,9 +82,21 @@ public class AuthServiceImpl implements AuthService {
 
         // Retornar a resposta
         return AuthResponseDto.builder()
+                .message("Login sucesso!")
                 .token(jwtToken)
                 .username(user.getUsername())
                 .build();
+
+        } catch (Exception e){
+            return AuthResponseDto.builder()
+                    .message("Login falhou")
+                    .token(null)
+                    .username(null)
+                    .build();
+
+        }
+
+
 
     }
 }
