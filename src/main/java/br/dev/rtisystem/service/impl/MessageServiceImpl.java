@@ -1,7 +1,6 @@
 package br.dev.rtisystem.service.impl;
 
 import br.dev.rtisystem.model.dtos.MessageDto;
-import br.dev.rtisystem.model.entity.Message;
 import br.dev.rtisystem.repository.MessageRepository;
 import br.dev.rtisystem.service.interfaces.MessageService;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -20,20 +18,6 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final ModelMapper modelMapper;
 
-    @Override
-    public MessageDto sendMessage(MessageDto message) {
-        return null;
-    }
-
-    @Override
-    public MessageDto getMessageById(UUID id) {
-        return null;
-    }
-
-    @Override
-    public void deleteMessage(UUID id) {
-
-    }
 
     @Override
     public List<MessageDto> getAllMessages() {
@@ -43,8 +27,4 @@ public class MessageServiceImpl implements MessageService {
                 .toList().reversed();
     }
 
-    @Override
-    public Message saveMessage(Message message) {
-        return this.messageRepository.save(message);
-    }
 }

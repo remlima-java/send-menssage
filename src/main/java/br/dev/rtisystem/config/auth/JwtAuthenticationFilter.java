@@ -24,14 +24,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(
+    public void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        // Verifica se é uma solicitação para o endpoint /stream com token no parâmetro
         if (request.getRequestURI().startsWith("/stream") && request.getParameter("token") != null) {
-            // Deixa passar para ser tratado pelo controlador
             filterChain.doFilter(request, response);
             return;
         }
@@ -40,22 +38,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
 
-        // Se não há token ou não começa com "Bearer ", passa para o próximo filtro
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
 
-        // Extrai o token e o username
         jwt = authHeader.substring(7);
         username = jwtService.extractUsername(jwt);
 
-        // Se o username existe e não há autenticação atual
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            // Verifica se o token é válido
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -64,7 +59,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // Atualiza o contexto de segurança
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

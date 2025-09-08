@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         return this.userRepository
                 .findById(id)
                     .map(user -> this.modelMapper.map(user, UserDto.class))
-                        .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+                        .orElseThrow(() -> new UserNotFoundException("User not found with id: ".concat(String.valueOf(id))));
     }
 
     @Override
