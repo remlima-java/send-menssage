@@ -1,5 +1,6 @@
 package br.dev.rtisystem.service.impl.auth;
 
+import br.dev.rtisystem.exceptions.UserNotFoundException;
 import br.dev.rtisystem.model.dtos.login.AuthResponseDto;
 import br.dev.rtisystem.model.dtos.login.LoginDto;
 import br.dev.rtisystem.model.dtos.login.RegisterDto;
@@ -28,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponseDto register(RegisterDto request) {
         // Verificar se o usuário já existe
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new RuntimeException("Usuário já existe");
+            throw new UserNotFoundException("Usuário já existe");
         }
 
         // Criar um novo usuário

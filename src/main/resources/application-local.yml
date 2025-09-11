@@ -1,0 +1,52 @@
+spring:
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    consumer:
+      group-id: chat-group-ui
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+
+
+logging:
+  level:
+    root: INFO
+    br.dev.rtisystem: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO
+
+# Configuração do Actuator com Prometheus para integração com Grafana
+management:
+  endpoints:
+    web:
+     exposure:
+      include:
+      - prometheus
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    disable-swagger-default-url: true
+  show-actuator: true
+server:
+  servlet:
+    context-path:
+url:
+  ngrok:
+    link: ${NGROK}
