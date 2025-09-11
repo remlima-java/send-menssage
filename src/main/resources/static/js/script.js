@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
 
-                throw new Error(`Erro ao carregar mensagens: ${response.status}`);
+                console.error(`Erro ao carregar mensagens: ${response.status}`);
             }
 
             const messages = await response.json();
